@@ -1,0 +1,64 @@
+<?php
+include_once('menu.php');
+include_once('weixin.class.php');//引用刚定义的微信消息处理类<br>
+define("TOKEN", "sdnu");
+$weixin = new Weixin(TOKEN);//实例化
+$weixin->getMsg();
+$type = $weixin->msgtype;//消息类型
+$fusername = $weixin->msg['FromUserName'];//哪个用户给你发的消息,这个$username是微信加密之后的，但是每个用户都是一一对应的
+if($type=='event'){
+  if("subscribe"==$weixin->msg['Event']){
+    https_request($url, $jsonmenu);
+    $welcome = "欢迎使用学生信息管理系统。";
+    $reply = $weixin->makeText($welcome);
+    $weixin->reply($reply);
+  }elseif("admin"===$weixin->msg['EventKey']){
+    $welcome = "【查询学生信息】请回复：\nAFN,管理员账号,密码,学生姓名";
+    $reply = $weixin->makeText($welcome);
+    $weixin->reply($reply);
+  }elseif("student"===$weixin->msg['EventKey']){
+    $welcome = "【查询个人信息】请回复：\nSF,学号,密码";
+    $reply = $weixin->makeText($welcome);
+    $weixin->reply($reply);
+  }
+}elseif ($type=='text') {
+      $keyword = $weixin->msg['Content'];
+      $arr = explode(",", $keyword);
+      $keyword = strtoupper($arr[0]);
+      if($keyword=='SF'){
+
+          $reply = $weixin->makeText("SF");
+          $weixin->reply($reply);
+        
+      }
+      if($keyword=='AFN'){
+
+          $reply = $weixin->makeText("AFN");
+          $weixin->reply($reply);
+
+      }
+      if($keyword=='AFS'){
+
+          $reply = $weixin->makeText("AFS");
+          $weixin->reply($reply);
+
+      }
+      else{
+        $reply = $weixin->makeText("欢迎使用学生信息管理系统。");
+        $weixin->reply($reply);
+      }
+}elseif ($type=='location') {
+    //用户发送的是位置信息  稍后的文章中会处理 
+    $reply = $weixin->makeText('不好意思，您的定位我还处理不了哟~');  
+    $weixin->reply($reply);               
+}elseif ($type=='image') {
+    //用户发送的是图片 稍后的文章中会处理
+  $reply = $weixin->makeText('欢迎你关注妈妈助手哦');
+  $weixin->reply($reply);
+}elseif ($type=='voice') {     
+    //用户发送的是声音 稍后的文章中会处理
+  $reply = $weixin->makeText('欢迎你关注妈妈助手哦');
+  $weixin->reply($reply);
+}
+
+?>

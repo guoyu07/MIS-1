@@ -1,0 +1,53 @@
+<?php
+session_start();
+require_once("./nusoapClient.php");
+require_once("../config.php");
+$url = $GLOBALS['URL'];
+//判断是否登录
+require_once("./fun.php");
+if(!isset($_SESSION['username']) || !isset($_SESSION['password'])){
+	echo "<p><h1>Invalid!</h1></p>";
+	echo "<p><a href='$url'>Click here to log in.</a></p>";
+	exit();
+}else{
+	check_valid($_SESSION['username'],$_SESSION['password']);
+}
+$rows = get_stu_list($_SESSION['username'],$_SESSION['password']);
+//显示页面
+$menu = "stu_list";
+require_once("./file/top.php");
+?>
+<!--中间内容部分-->
+<div class="container" style="padding-top:50px;padding-left:100px;">
+	<table class="table table-bordered">
+		<tr>
+			<th>学号</th>
+			<th>姓名</th>
+			<th>性别</th>
+			<th>详细信息</th>
+			<th>编辑</th>
+			<th>删除</th>
+		</tr>
+	<?php 
+		foreach ($rows as $row) {
+			echo "<tr align='center'>";
+			echo "<td>".$row['sid']."</td>";
+			echo "<td>".$row['name']."</td>";
+			if($row['sex']==1){
+				echo "<td>男</td>";
+			}else{
+				echo "<td>女</td>";
+			}
+			echo "<td><a href='detail.php?sid=".$row['sid']."'>详细信息</a>";
+			echo "<td><a href='edit.php?sid=".$row['sid']."'>编辑</a>";
+			echo "<td><a href='delete.php?sid=".$row['sid']."'>删除</a>";
+			echo "</tr>";
+		}
+	?>
+	</table>
+</div>
+<!--中间内容部分结束-->
+<?php require_once('./file/footer.php');?>
+</div><!--container end-->
+</body>
+</html>

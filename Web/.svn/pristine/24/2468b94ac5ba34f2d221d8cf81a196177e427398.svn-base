@@ -1,0 +1,16 @@
+<?php
+require_once("nusoapClient.php");
+require_once("../config.php");
+$url = $GLOBALS['URL'];
+session_start();
+$sid = addslashes($_POST['name']);
+$password = md5("m".$_POST['password']);
+$result = check_user($sid,$password);
+if($result=="valid"){
+	$_SESSION['sid'] = $sid;
+	$_SESSION['password'] =$password;
+	echo "<script>window.location.href='./index.html';</script>";
+}else{
+	echo "<p>wrong username or password.</p><p><a href='$url'>Click here to log in.</a></p>";
+}
+?>

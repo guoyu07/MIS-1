@@ -1,0 +1,62 @@
+<?php
+
+//管理员用户登录判断
+function admin_judge($username,$password){
+	$mysql = new SaeMysql();
+	$sql = "select `password` from `admin` where `username`='$username'";
+	$row = $mysql->getLine($sql);
+	if($row['password'] == $password){
+		return "valid";
+	}else{
+		return "invalid";
+	}
+}
+
+//学生用户登录判断
+function student_judge($sid,$password){
+	$mysql = new SaeMysql();
+	$row = $mysql->getLine("select `password` from `user` where `sid`='$sid'");
+	if($row['password'] == $password){
+		return "valid";
+	}else{
+		return "invalid";
+	}
+}
+
+//学生用户获取自己的信息
+function student_get_my_info($sid,$password){
+	$mysql = new SaeMysql();
+	$row = $mysql->getLine("select * from `user` where `sid`='$sid'");
+	if($row['password'] == $password){
+		$result = json_encode($row);
+		return $result;
+	}else{
+		return "invalid";
+	}
+}
+
+//学生用户更新自己的信息
+function student_update_my_info($sid,$password,$name,$sex,$idnum,$email,$phone,$addr,$pic){
+	$mysql = new SaeMysql();
+	$row = $mysql->getLine("select * from `user` where `sid`='$sid'");
+	if($row['password'] == $password){
+		//验证通过，执行更新信息操作
+		if($pic==''){
+		$sql = "update `user` set `name`='$name',`sex`=$sex,`idnum`='$idnum',`email`='$email',`phone`='$phone',`addr`='$addr' where `sid`='$sid'";
+		}else{
+		$sql = "update `user` set `name`='$name',`sex`=$sex,`idnum`='$idnum',`email`='$email',`phone`='$phone',`addr`='$addr',`pic`='$pic' where `sid`='$sid'";
+		}
+		$mysql->runSql($sql);
+		return "success";
+	}else{
+		return "invalid";
+	}
+}
+
+//学生用户更新自己的密码
+function student_update_my_pwd($sid,$password){
+	$mysql = new SaeMysql();
+	$sql = "update `user` set `password`='$password' where `sid`='$sid'";
+	$mysql->runSql($sql);
+	return 'success';
+}

@@ -1,0 +1,48 @@
+<?php
+require_once('../config.php');
+require_once('../lib/nusoap.php');
+
+
+function get_stu_list($username,$password){
+	$client = new soapclient ($GLOBALS['nusoapserver_url']);
+	$client->soap_defencoding = 'UTF-8';
+	$client->decode_utf8 = false;
+	$client->xml_encoding = 'UTF-8';
+
+	$result = $client->call('get_stu_list', array('username'=>"$username","password"=>"$password"));
+	if (!$err = $client->getError()) {
+		$result = json_decode($result,true);
+		return $result;
+	} else {
+		echo "调用出错：", $err;
+	}
+}
+
+function admin_judge($username,$password){
+	$client = new soapclient ($GLOBALS['nusoapserver_url']);
+	$client->soap_defencoding = 'UTF-8';
+	$client->decode_utf8 = false;
+	$client->xml_encoding = 'UTF-8';
+
+	$result = $client->call('admin_judge', array('username'=>"$username","password"=>"$password"));
+	if (!$err = $client->getError()) {
+		return $result;
+	} else {
+		echo "调用出错：", $err;
+	}
+}
+
+function admin_info($username,$password){
+	$client = new soapclient ($GLOBALS['nusoapserver_url']);
+	$client->soap_defencoding = 'UTF-8';
+	$client->decode_utf8 = false;
+	$client->xml_encoding = 'UTF-8';
+
+	$result = $client->call('admin_info', array('username'=>"$username","password"=>"$password"));
+	if (!$err = $client->getError()) {
+		$result = json_decode($result,true);
+		return $result;
+	} else {
+		echo "调用出错：", $err;
+	}
+}

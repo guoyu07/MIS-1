@@ -1,0 +1,64 @@
+<?php
+require_once('../config.php');
+require_once('../lib/nusoap.php');
+
+//检查用户是否合法
+function check_user($sid,$password){
+	$client = new soapclient ($GLOBALS['nusoapserver_url']);
+	$client->soap_defencoding = 'UTF-8';
+	$client->decode_utf8 = false;
+	$client->xml_encoding = 'UTF-8';
+
+	$result = $client->call('student_judge', array('sid'=>"$sid","password"=>"$password"));
+	if (! $err = $client->getError()) {
+		return $result;
+	} else {
+		echo "调用出错：", $err;
+	}
+}
+
+//获取用户数据
+function my_info($sid,$password){
+	$client = new soapclient ($GLOBALS['nusoapserver_url']);
+	$client->soap_defencoding = 'UTF-8';
+	$client->decode_utf8 = false;
+	$client->xml_encoding = 'UTF-8';
+
+	$result = $client->call('student_get_my_info', array('sid'=>"$sid","password"=>"$password"));
+	if (!$err = $client->getError()) {
+		$result = json_decode($result,true);
+		return $result;
+	} else {
+		echo "调用出错：", $err;
+	}
+}
+
+//更新用户数据
+function update_info($sid,$password,$name,$sex,$idnum,$email,$phone,$addr,$pic){
+	$client = new soapclient ($GLOBALS['nusoapserver_url']);
+	$client->soap_defencoding = 'UTF-8';
+	$client->decode_utf8 = false;
+	$client->xml_encoding = 'UTF-8';
+
+	$result = $client->call('student_update_my_info', array("sid"=>"$sid","password"=>"$password","name"=>"$name","sex"=>"$sex","idnum"=>"$idnum","email"=>"$email","phone"=>"$phone","addr"=>"$addr",,"pic"=>"$pic"));
+	if (!$err = $client->getError()) {
+		return $result;
+	} else {
+		echo "调用出错：", $err;
+	}
+}
+
+//更新用户密码
+function update_pwd($sid,$password){
+	$client = new soapclient ($GLOBALS['nusoapserver_url']);
+	$client->soap_defencoding = 'UTF-8';
+	$client->decode_utf8 = false;
+	$client->xml_encoding = 'UTF-8';
+
+	$result = $client->call('student_update_my_pwd', array("sid"=>"$sid","password"=>"$password"));
+	if (!$err = $client->getError()) {
+		return $result;
+	} else {
+		echo "调用出错：", $err;
+	}
+}

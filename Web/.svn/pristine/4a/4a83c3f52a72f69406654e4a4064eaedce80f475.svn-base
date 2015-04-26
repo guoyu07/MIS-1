@@ -1,0 +1,67 @@
+<?php
+session_start();
+require_once("./nusoapClient.php");
+require_once("../config.php");
+$url = $GLOBALS['URL'];
+//判断是否登录
+require_once("./fun.php");
+if(!isset($_SESSION['username']) || !isset($_SESSION['password'])){
+	echo "<p><h1>Invalid!</h1></p>";
+	echo "<p><a href='$url'>Click here to log in.</a></p>";
+	exit();
+}else{
+	check_valid($_SESSION['username'],$_SESSION['password']);
+}
+$sid = intval($_GET['sid']);
+$info = get_stu_info($_SESSION['username'],$_SESSION['password'],$sid);
+//显示页面
+$menu = "stu_list";
+require_once("./file/top.php");
+?>
+<!--中间内容部分-->
+<div class="container" style="margin-top:20px;width:80%;float:left;">      
+         <ol class="breadcrumb">
+          <li><a href="stu_list.php">学生列表</a></li>
+          <li class="active">学生详细信息</li>
+        </ol>
+</div>
+<div class="container" style="padding-top:10px;padding-left:80px;padding-right:100px;">
+	
+	<table class="table table-bordered">
+		<tr>
+			<td>姓名</td><td><?php echo $info['name'];?></td>
+			<td rowspan="6" align="center">
+				<?php if($info['pic']==''){?>
+					<img src="../public/upload/default.png" width="400px"/>
+				<?php
+				}else{
+					$pic = $info['pic'];
+					echo '<img src="'.$info['pic'].'" width="400px"/>';
+				}
+				?>
+			</td>
+		</tr>
+		<tr>
+			<td>性别</td>
+			<td>
+				<?php
+					if($info['sex']==1){
+						echo "男";
+					}else{
+						echo "女";
+					}
+				?>
+			</td>
+		</tr>
+		<tr><td>学号</td><td><?php echo $info['sid'];?></td></tr>
+		<tr><td>身份证号</td><td><?php echo $info['idnum'];?></td></tr>
+		<tr><td>电话</td><td><?php echo $info['phone'];?></td></tr>
+		<tr><td>邮箱</td><td><?php echo $info['email'];?></td></tr>
+		<tr><td>家庭住址</td><td><?php echo $info['addr']?></td></tr>
+	</table>
+</div>
+<!--中间内容部分结束-->
+<?php require_once('./file/footer.php');?>
+</div><!--container end-->
+</body>
+</html>

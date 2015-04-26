@@ -1,0 +1,5 @@
+<?php
+
+$arr = Array (  Array ( [id] => 1 [xuefei] => 50万以下 ) , Array ( [id] => 2 [xuefei] =>51万~60万 ) , Array ( [id] => 3 [xuefei] => 61万~70万 ) , Array ( [id] => 4 [xuefei] => 71万~80万 ) , Array ( [id] => 5 [xuefei] => 81万~90万 ) , Array ( [id] => 6 [xuefei] => 90万以上) );
+
+echo count($arr);

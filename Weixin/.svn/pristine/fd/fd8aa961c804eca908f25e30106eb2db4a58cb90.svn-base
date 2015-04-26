@@ -1,0 +1,7 @@
+<?php
+
+echo "hi<hr/>";
+
+$arr = Array (  array("Volvo","BMW","SAAB"),array("naruto","kakx","xiaoying") );
+
+echo count($arr);
